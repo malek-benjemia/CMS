@@ -3,28 +3,16 @@ const router = express.Router();
 const db = require('../../db/database');
 const inputCheck = require('../../utils/inputCheck');
 
-// Get single employee
-router.get('/employee/:id', (req, res) => {
-  const sql = `SELECT * FROM employees WHERE id = ?`;
-  const params = [req.params.id];
-
-  db.execute(sql, params, (err, row, fields) => {
-    if (err) {
-      res.status(400).json({ error: err.message });
-      return;
-    }
-
-    res.json({
-      message: 'success',
-      data: row
-    });
-  });
-});
 
 // Get all employees
 
 router.get('/employees', (req, res) => {
-    const sql = `SELECT * FROM employees ORDER BY last_name`;
+    const sql = `SELECT emp1.id, emp1.first_name, emp1.last_name, rls.title, dep.name as departmet_name, rls.salary, emp2.first_name as manager_first_name, emp2.last_name as manager_last_name
+                  FROM employees emp1
+                  LEFT JOIN roles rls on (emp1.role_id = rls.id)
+                  LEFT JOIN departments dep on (rls.department_id = dep.id)
+                  LEFT JOIN employees emp2 on (emp1.manager_id = emp1.id)
+                  ORDER BY last_name`;
     const params = [];
   
     db.execute(sql, params, (err, rows, fields) => {

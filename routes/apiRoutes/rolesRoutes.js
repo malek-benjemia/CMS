@@ -3,28 +3,14 @@ const router = express.Router();
 const db = require('../../db/database');
 const inputCheck = require('../../utils/inputCheck');
 
-// Get single role
-router.get('/role/:id', (req, res) => {
-  const sql = `SELECT * FROM roles WHERE id = ?`;
-  const params = [req.params.id];
-
-  db.execute(sql, params, (err, row, fields) => {
-    if (err) {
-      res.status(400).json({ error: err.message });
-      return;
-    }
-
-    res.json({
-      message: 'success',
-      data: row
-    });
-  });
-});
 
 // Get all roles
 
 router.get('/roles', (req, res) => {
-    const sql = `SELECT * FROM roles`;
+    const sql = `SELECT roles.id, roles.title , departments.name as department_name, roles.salary
+                FROM roles
+                LEFT JOIN departments on (roles.department_id = departments.id)
+                  `;
     const params = [];
   
     db.execute(sql, params, (err, rows, fields) => {

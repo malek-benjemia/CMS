@@ -3,24 +3,6 @@ const router = express.Router();
 const db = require('../../db/database');
 const inputCheck = require('../../utils/inputCheck');
 
-// Get single department
-  router.get('/department/:id', (req, res) => {
-    const sql = `SELECT * FROM departments WHERE departments.id = ?`;
-    const params = [req.params.id];
-    db.execute(sql, params, (err, row, fields) => {
-      if (err) {
-        res.status(400).json({ error: err.message });
-        return;
-      }
-  
-      res.json({
-        message: 'success',
-        data: row
-      });
-    });
-  });
-
-  
 // Get all departments
 router.get('/departments', (req, res) => {
     const sql = `SELECT * FROM departments`;
