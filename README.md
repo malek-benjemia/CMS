@@ -2,5 +2,5 @@
 
 node.js
 mysql2
-sqlite3
+console.tablepackage
 inquirer

@@ -1,5 +1,7 @@
 const express = require('express');
 const con = require('./db/database.js');
+const Questions= require('./src/Questions.js');
+
 
 const PORT = process.env.PORT || 3001;
 const app = express();
@@ -22,6 +24,8 @@ app.use((req, res) => {
 con.on('connect', () => {
   app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
+      //initial function
+      new Questions().initializeQuestions();
   });
 });
 
