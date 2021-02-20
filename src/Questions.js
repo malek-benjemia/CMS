@@ -138,71 +138,9 @@ class Questions {
     }
 
     addRole() {
-        this.promptUserRole ()
-        .then(({ title, department_id, salary }) => {
-            fetch(`http://localhost:${PORT}/api/role`, {
-                method: 'POST',
-                headers: {
-                'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(title, department_id, salary),
-            })
-            .then(async function(response) {
-                // request was successful
-                if (response.ok) {
-                    await response.json().then(async function(data) {
-                    console.log(data);
-                  })
-            }})
-            .catch((err) => {console.log(err);});
-        });
-    }
-
-    addEmployee() {
-        this.promptUserEmployee ()
-        .then(({ first_name, last_name, role_id, manager_id }) => {
-            fetch(`http://localhost:${PORT}/api/employee`, {
-                method: 'POST',
-                headers: {
-                'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(first_name, last_name, role_id, manager_id),
-            })
-            .then(async function(response) {
-                // request was successful
-                if (response.ok) {
-                    await response.json().then(async function(data) {
-                    console.log(data);
-                  })
-            }})
-            .catch((err) => {console.log(err);});
-        });
-    }
-
-//prompt for details to add
-    promptUserDepartment() {
         inquirer
-        .prompt({
-            type: 'text',
-            name: 'name',
-            message: 'Enter the department name: ',
-            validate: nameInput => {
-                if (nameInput) {
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-        }
-        )
-        .then(({ name }) => {
-            return name;
-        });
-    }
-    
-    promptUserRole() {
-        inquirer
-        .prompt({
+        .prompt([
+        {
             type: 'text',
             name: 'title',
             message: 'Enter the job title: ',
@@ -216,7 +154,7 @@ class Questions {
         },
         {
             type: 'checkbox',
-            name: 'department',
+            name: 'department_id',
             message: 'Select the department: ',
             choices: [1,2],
             validate: nameInput => {
@@ -232,22 +170,38 @@ class Questions {
             name: 'salary',
             message: 'Enter the salary: ',
             validate: nameInput => {
-                if (nameInput) {
+                if (nameInput ) {
                     return true;
                 } else {
                     return false;
                 }
             }
-        },
-        )
-        .then(({ title,department_id,salary }) => {
-            return (title,department_id,salary);
+        }
+        ])
+        .then(({ title, department_id, salary }) => { 
+            department_id=parseInt(department_id); 
+            fetch(`http://localhost:${PORT}/api/role`, {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({title, department_id, salary}),
+            })
+            .then(async function(response) {
+                // request was successful
+                if (response.ok) {
+                    await response.json().then(async function(data) {
+                    console.log(data);
+                  })
+            }})
+            .catch((err) => {console.log(err);});
         });
     }
 
-    promptUserEmployee() {
+    addEmployee() {
         inquirer
-        .prompt({
+        .prompt([
+        {
             type: 'text',
             name: 'first_name',
             message: 'Enter the employee first name: ',
@@ -261,7 +215,7 @@ class Questions {
         },
         {
             type: 'text',
-            name: 'tlast_name',
+            name: 'last_name',
             message: 'Enter the employee last name: ',
             validate: nameInput => {
                 if (nameInput) {
@@ -296,10 +250,26 @@ class Questions {
                     return false;
                 }
             }
-        },
+        }]
         )
         .then(({ first_name, last_name, role_id, manager_id }) => {
-            return (first_name, last_name, role_id, manager_id);
+            role_id=parseInt(role_id); 
+            manager_id=parseInt(manager_id); 
+            fetch(`http://localhost:${PORT}/api/employee`, {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({first_name, last_name, role_id, manager_id}),
+            })
+            .then(async function(response) {
+                // request was successful
+                if (response.ok) {
+                    await response.json().then(async function(data) {
+                    console.log(data);
+                  })
+            }})
+            .catch((err) => {console.log(err);});
         });
     }
 
