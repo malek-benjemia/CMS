@@ -1,7 +1,7 @@
 # Title: CMS</br>
 
 ## <span id="description">Description</span>
-Build an application that allows to manage departments, employees and roles. Please find refer to the <a href="">video</a> for more information.
+Build an application that allows to manage departments, employees and roles. Please find refer to the <a href="https://drive.google.com/file/d/1ZfgN_WPvkIP9Q02c1JMcPNjWSSRIoBQq/view">video</a> for more information.
 
 ## <span id="content">Table of Contents</span>
 <a href="#description">Description</a></br>
