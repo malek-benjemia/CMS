@@ -52,7 +52,7 @@ router.get('/employees', (req, res) => {
     const sql = `INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUES (?,?,?,?)`;
     const params = [body.first_name, body.last_name, body.role_id, body.manager_id];
   
-    db.execute(sql, params, function(err, data, fields) {
+    db.execute(sql, params, function(err, result, fields) {
       if (err) {
         res.status(400).json({ error: err.message });
         return;
@@ -78,10 +78,10 @@ router.get('/employees', (req, res) => {
   
     // Prepare statement
     const sql = `UPDATE employees SET role_id = ? WHERE id = ?`;
-    const params = [req.body.email, req.params.id];
+    const params = [req.body.id, req.params.id];
   
     // Execute
-    db.execute(sql, params, function(err, data, fields) {
+    db.execute(sql, params, function(err, result, fields) {
       if (err) {
         res.status(400).json({ error: err.message });
         return;
@@ -89,7 +89,7 @@ router.get('/employees', (req, res) => {
   
       res.json({
         message: 'success',
-        data: req.body,
+        data: body,
         changes: this.changes
       });
     });

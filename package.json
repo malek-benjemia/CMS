@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest",
     "migrate": "node db/schema.js",
-    "seed": "node deb/seeds.js",
+    "seed": "node db/seeds.js",
     "start": "node server.js"
   },
   "repository": {

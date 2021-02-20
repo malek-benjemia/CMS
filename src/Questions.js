@@ -104,9 +104,22 @@ class Questions {
     }
 //add
     addDepartment () {
-        this.promptUserDepartment ()
-        .then(({ name }) => {
-            fetch(`http://localhost:${PORT}/api/deprtment`, {
+        inquirer
+        .prompt({
+            type: 'text',
+            name: 'name',
+            message: 'Enter the department name: ',
+            validate: nameInput => {
+                if (nameInput) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        }
+        )
+        .then(( name ) => { console.log(name);
+            fetch(`http://localhost:${PORT}/api/department`, {
                 method: 'POST',
                 headers: {
                 'Content-Type': 'application/json',
@@ -124,8 +137,8 @@ class Questions {
         });
     }
 
-    addRole () {
-        this. promptUserRole ()
+    addRole() {
+        this.promptUserRole ()
         .then(({ title, department_id, salary }) => {
             fetch(`http://localhost:${PORT}/api/role`, {
                 method: 'POST',
@@ -145,7 +158,7 @@ class Questions {
         });
     }
 
-    addEmployee () {
+    addEmployee() {
         this.promptUserEmployee ()
         .then(({ first_name, last_name, role_id, manager_id }) => {
             fetch(`http://localhost:${PORT}/api/employee`, {
@@ -167,14 +180,14 @@ class Questions {
     }
 
 //prompt for details to add
-    promptUserDepartment () {
+    promptUserDepartment() {
         inquirer
         .prompt({
             type: 'text',
             name: 'name',
             message: 'Enter the department name: ',
             validate: nameInput => {
-                if (nameInput.length==1) {
+                if (nameInput) {
                     return true;
                 } else {
                     return false;
@@ -187,14 +200,14 @@ class Questions {
         });
     }
     
-    promptUserRole () {
+    promptUserRole() {
         inquirer
         .prompt({
             type: 'text',
             name: 'title',
             message: 'Enter the job title: ',
             validate: nameInput => {
-                if (nameInput.length==1) {
+                if (nameInput) {
                     return true;
                 } else {
                     return false;
@@ -219,7 +232,7 @@ class Questions {
             name: 'salary',
             message: 'Enter the salary: ',
             validate: nameInput => {
-                if (nameInput.length==1) {
+                if (nameInput) {
                     return true;
                 } else {
                     return false;
@@ -232,14 +245,14 @@ class Questions {
         });
     }
 
-    promptUserEmployee () {
+    promptUserEmployee() {
         inquirer
         .prompt({
             type: 'text',
             name: 'first_name',
             message: 'Enter the employee first name: ',
             validate: nameInput => {
-                if (nameInput.length==1) {
+                if (nameInput) {
                     return true;
                 } else {
                     return false;
@@ -251,7 +264,7 @@ class Questions {
             name: 'tlast_name',
             message: 'Enter the employee last name: ',
             validate: nameInput => {
-                if (nameInput.length==1) {
+                if (nameInput) {
                     return true;
                 } else {
                     return false;

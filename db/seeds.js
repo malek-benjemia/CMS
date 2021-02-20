@@ -1,31 +1,31 @@
 const con = require('./database.js');
 
 con.on('connect', () => {
-  const sql = `INSERT INTO departments (id,name)
+  const sql = `INSERT INTO departments (name)
 VALUES
-  (0,'Capital Markets'),
-  (1,'Wealth Management'),
-  (2,'Commercial Banking'),
-  (3,'Retail Banking'),
-  (4,'Technology'),
-  (5,'Operations'),
-  (6,'Human Resources'),
-  (7,'Finance');
+  ('Capital Markets'),
+  ('Wealth Management'),
+  ('Commercial Banking'),
+  ('Retail Banking'),
+  ('Technology'),
+  ('Operations'),
+  ('Human Resources'),
+  ('Finance');
 
-INSERT INTO roles (id,title, department_id, salary)
+INSERT INTO roles (title, department_id, salary)
 VALUES
-  (0,'CEO', 0, 10000000),
-  (1,'Managing Director - Head', 0, 250000),
-  (2,'Managing Director', 1, 200000),
-  (3,'Director', 2, 180000),
-  (4,'Vice President', 3, 150000),
-  (5,'Associate', 4, 120000),
-  (6,'Analyst', 5, 90000);
+  ('CEO', NULL, 10000000),
+  ('Managing Director - Head', NULL, 250000),
+  ('Managing Director', NULL, 200000),
+  ('Director', NULL, 180000),
+  ('Vice President', NULL, 150000),
+  ('Associate', NULL, 120000),
+  ('Analyst', NULL, 90000);
   
-INSERT INTO employees (id,first_name, last_name, role_id, manager_id)
+INSERT INTO employees (first_name, last_name, role_id, manager_id)
 VALUES
-  (0,'Ronald', 'Firbank', 0, NULL),
-  (1,'Virginia', 'Woolf', 1, 0);`;
+  ('Ronald', 'Firbank', NULL, NULL),
+  ('Virginia', 'Woolf', NULL, NULL);`;
   const params = [];
 
   con.query(sql, params, (err, rows, fields) => {

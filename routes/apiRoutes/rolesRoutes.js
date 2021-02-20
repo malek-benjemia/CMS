@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../../db/database');
+const inputCheck = require('../../utils/inputCheck');
 
 // Get single role
 router.get('/role/:id', (req, res) => {
@@ -51,7 +52,7 @@ router.get('/roles', (req, res) => {
     const sql = `INSERT INTO roles (title, department_id, salary) VALUES (?,?,?)`;
     const params = [body.title, body.department_id, body.salary];
   
-    db.execute(sql, params, function(err, data, fields) {
+    db.execute(sql, params, function(err, result, fields) {
       if (err) {
         res.status(400).json({ error: err.message });
         return;
