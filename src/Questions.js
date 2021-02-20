@@ -1,6 +1,9 @@
 const fetch = require("node-fetch");
 const inquirer = require('inquirer');
 const PORT = process.env.PORT || 3001;
+const cTable = require('console.table');
+
+
 
 class Questions {
     constructor() {
@@ -63,7 +66,7 @@ class Questions {
             // request was successful
             if (response.ok) {
                 await response.json().then(async function(data) {
-                console.log(data);
+                console.table(data.data);
               })
         }})
         .catch((err) => {console.log(err);});
@@ -80,7 +83,7 @@ class Questions {
             // request was successful
             if (response.ok) {
                 await response.json().then(async function(data) {
-                console.log(data);
+                console.table(data.data);
               })
         }})
         .catch((err) => {console.log(err);});
@@ -97,7 +100,7 @@ class Questions {
             // request was successful
             if (response.ok) {
                 await response.json().then(async function(data) {
-                console.log(data);
+                console.table(data.data);
               })
         }})
         .catch((err) => {console.log(err);});
@@ -130,7 +133,8 @@ class Questions {
                 // request was successful
                 if (response.ok) {
                     await response.json().then(async function(data) {
-                    console.log(data);
+                    console.log("success");
+                    console.table(data.data);
                   })
             }})
             .catch((err) => {console.log(err);});
@@ -207,7 +211,8 @@ class Questions {
                         // request was successful
                         if (response.ok) {
                             await response.json().then(async function(data) {
-                            console.log(data);
+                                console.log("success");
+                                console.table(data.data);
                         })
                     }})
                     .catch((err) => {console.log(err);});
@@ -318,7 +323,8 @@ class Questions {
                                         // request was successful
                                         if (response.ok) {
                                             await response.json().then(async function(data) {
-                                            console.log(data);
+                                                console.log("success");
+                                                console.table(data.data);
                                         })
                                     }})
                                     .catch((err) => {console.log(err);});
@@ -328,7 +334,99 @@ class Questions {
                     }})
                     .catch((err) => {console.log(err);});
     }
+//update employee
 
+updateEmployeeRole() {
+
+    var rolesData =[];
+    fetch(`http://localhost:${PORT}/api/roles`, {
+        method: 'GET',
+        headers: {
+        'Content-Type': 'application/json',
+        },
+    })
+    .then(async function(response) {
+        // request was successful
+        if (response.ok) {
+            await response.json().then(async function(data) {
+            for (var i =0; i<data.data.length; i++){
+                rolesData[i] = data.data[i].id+" "+data.data[i].title+" "+data.data[i].department_name;
+            }
+          })
+    
+          var employeesData =[];
+          fetch(`http://localhost:${PORT}/api/employees`, {
+              method: 'GET',
+              headers: {
+              'Content-Type': 'application/json',
+              },
+          })
+          .then(async function(response) {
+              // request was successful
+              if (response.ok) {
+                  await response.json().then(async function(data) {
+                  for (var i =0; i<data.data.length; i++){
+                      employeesData[i] = data.data[i].id+" "+data.data[i].first_name+" "+data.data[i].last_name;
+                  }
+                })
+
+                            inquirer
+                            .prompt([
+                            {
+                                type: 'checkbox',
+                                name: 'employee_id',
+                                message: 'Select the employee to update: ',
+                                choices: employeesData,
+                                validate: nameInput => {
+                                    if (nameInput.length==1) {
+                                        return true;
+                                    } else {
+                                        return false;
+                                    }
+                                }
+                            },
+                            {
+                                type: 'checkbox',
+                                name: 'new_role_id',
+                                message: 'Select the new role: ',
+                                choices: rolesData,
+                                validate: nameInput => {
+                                    if (nameInput.length==1) {
+                                        return true;
+                                    } else {
+                                        return false;
+                                    }
+                                }
+                            }]
+                            )
+                            .then(({ employee_id, new_role_id }) => {
+                                employee_id=parseInt(employee_id[0]); 
+                                new_role_id=parseInt(new_role_id[0]); 
+                                fetch(`http://localhost:${PORT}/api/employee`, {
+                                    method: 'PUT',
+                                    headers: {
+                                    'Content-Type': 'application/json',
+                                    },
+                                    body: JSON.stringify({employee_id, new_role_id}),
+                                })
+                                .then(async function(response) {
+                                    // request was successful
+                                    if (response.ok) {
+                                        await response.json().then(async function(data) {
+                                            console.log("success");
+                                            console.table(data.data);
+                                    })
+                                }})
+                                .catch((err) => {console.log(err);});
+                            });
+                        }})
+                        .catch((err) => {console.log(err);});
+                }})
+                .catch((err) => {console.log(err);});
+}
+
+//initialize
+    
     initializeQuestions() {
         this.promptUserInitialQuestions();
     }

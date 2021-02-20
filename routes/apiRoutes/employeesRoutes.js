@@ -7,12 +7,11 @@ const inputCheck = require('../../utils/inputCheck');
 // Get all employees
 
 router.get('/employees', (req, res) => {
-    const sql = `SELECT emp1.id, emp1.first_name, emp1.last_name, rls.title, dep.name as departmet_name, rls.salary, emp2.first_name as manager_first_name, emp2.last_name as manager_last_name
+    const sql = `SELECT emp1.id, emp1.first_name, emp1.last_name, rls.title, dep.name as department_name, rls.salary, emp2.first_name as manager_first_name, emp2.last_name as manager_last_name
                   FROM employees emp1
                   LEFT JOIN roles rls on (emp1.role_id = rls.id)
                   LEFT JOIN departments dep on (rls.department_id = dep.id)
-                  LEFT JOIN employees emp2 on (emp1.manager_id = emp1.id)
-                  ORDER BY last_name`;
+                  LEFT JOIN employees emp2 on (emp1.manager_id = emp2.id)`;
     const params = [];
   
     db.execute(sql, params, (err, rows, fields) => {
@@ -56,9 +55,9 @@ router.get('/employees', (req, res) => {
 
   // Update an employee role
 
-  router.put('/employee/:id', (req, res) => {
+  router.put('/employee/', (req, res) => {
     // Data validation
-    const errors = inputCheck(req.body, 'role_id');
+    const errors = inputCheck(req.body, 'employee_id', 'new_role_id');
     if (errors) {
       res.status(400).json({ error: errors });
       return;
@@ -66,7 +65,7 @@ router.get('/employees', (req, res) => {
   
     // Prepare statement
     const sql = `UPDATE employees SET role_id = ? WHERE id = ?`;
-    const params = [req.body.id, req.params.id];
+    const params = [req.body.new_role_id, req.body.employee_id];
   
     // Execute
     db.execute(sql, params, function(err, result, fields) {
@@ -77,7 +76,7 @@ router.get('/employees', (req, res) => {
   
       res.json({
         message: 'success',
-        data: body,
+        data: req.body,
         changes: this.changes
       });
     });

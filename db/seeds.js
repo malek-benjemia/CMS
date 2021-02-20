@@ -14,18 +14,18 @@ VALUES
 
 INSERT INTO roles (title, department_id, salary)
 VALUES
-  ('CEO', NULL, 10000000),
-  ('Managing Director - Head', NULL, 250000),
-  ('Managing Director', NULL, 200000),
-  ('Director', NULL, 180000),
-  ('Vice President', NULL, 150000),
-  ('Associate', NULL, 120000),
-  ('Analyst', NULL, 90000);
+  ('CEO', 1, 10000000),
+  ('Managing Director - Head', 1, 250000),
+  ('Managing Director', 1, 200000),
+  ('Director', 1, 180000),
+  ('Vice President', 1, 150000),
+  ('Associate', 1, 120000),
+  ('Analyst', 1, 90000);
   
 INSERT INTO employees (first_name, last_name, role_id, manager_id)
 VALUES
-  ('Ronald', 'Firbank', NULL, NULL),
-  ('Virginia', 'Woolf', NULL, NULL);`;
+  ('Ronald', 'Firbank', 1, NULL),
+  ('Virginia', 'Woolf', 2, 1);`;
   const params = [];
 
   con.query(sql, params, (err, rows, fields) => {

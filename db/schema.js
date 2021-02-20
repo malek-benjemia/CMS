@@ -4,6 +4,7 @@ con.on('connect', () => {
   const sql = `DROP TABLE IF EXISTS employees;
 DROP TABLE IF EXISTS roles;
 DROP TABLE IF EXISTS departments; 
+
 CREATE TABLE departments (
   id INTEGER PRIMARY KEY AUTO_INCREMENT,
   name VARCHAR(30) NOT NULL
