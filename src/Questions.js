@@ -118,7 +118,7 @@ class Questions {
             }
         }
         )
-        .then(( name ) => { console.log(name);
+        .then(( name ) => {
             fetch(`http://localhost:${PORT}/api/department`, {
                 method: 'POST',
                 headers: {
@@ -138,139 +138,195 @@ class Questions {
     }
 
     addRole() {
-        inquirer
-        .prompt([
-        {
-            type: 'text',
-            name: 'title',
-            message: 'Enter the job title: ',
-            validate: nameInput => {
-                if (nameInput) {
-                    return true;
-                } else {
-                    return false;
+        var departmentData =[];
+        fetch(`http://localhost:${PORT}/api/departments`, {
+            method: 'GET',
+            headers: {
+            'Content-Type': 'application/json',
+            },
+        })
+        .then(async function(response) {
+            // request was successful
+            if (response.ok) {
+                await response.json().then(async function(data) {
+                for (var i =0; i<data.data.length; i++){
+                    departmentData[i] = data.data[i].id+" "+data.data[i].name;
                 }
-            }
-        },
-        {
-            type: 'checkbox',
-            name: 'department_id',
-            message: 'Select the department: ',
-            choices: [1,2],
-            validate: nameInput => {
-                if (nameInput.length==1) {
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-        },
-        {
-            type: 'text',
-            name: 'salary',
-            message: 'Enter the salary: ',
-            validate: nameInput => {
-                if (nameInput ) {
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-        }
-        ])
-        .then(({ title, department_id, salary }) => { 
-            department_id=parseInt(department_id); 
-            fetch(`http://localhost:${PORT}/api/role`, {
-                method: 'POST',
-                headers: {
-                'Content-Type': 'application/json',
+              })
+        
+                inquirer
+                .prompt([
+                {
+                    type: 'text',
+                    name: 'title',
+                    message: 'Enter the job title: ',
+                    validate: nameInput => {
+                        if (nameInput) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }
                 },
-                body: JSON.stringify({title, department_id, salary}),
-            })
-            .then(async function(response) {
-                // request was successful
-                if (response.ok) {
-                    await response.json().then(async function(data) {
-                    console.log(data);
-                  })
+                {
+                    type: 'checkbox',
+                    name: 'department_id',
+                    message: 'Select the department: ',
+                    choices: departmentData ,
+                    validate: nameInput => {
+                        if (nameInput.length==1) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }
+                },
+                {
+                    type: 'text',
+                    name: 'salary',
+                    message: 'Enter the salary: ',
+                    validate: nameInput => {
+                        if (nameInput ) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }
+                }
+                ])
+                .then(({ title, department_id, salary }) => { 
+                    department_id=parseInt(department_id); 
+                    fetch(`http://localhost:${PORT}/api/role`, {
+                        method: 'POST',
+                        headers: {
+                        'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({title, department_id, salary}),
+                    })
+                    .then(async function(response) {
+                        // request was successful
+                        if (response.ok) {
+                            await response.json().then(async function(data) {
+                            console.log(data);
+                        })
+                    }})
+                    .catch((err) => {console.log(err);});
+                });
             }})
-            .catch((err) => {console.log(err);});
-        });
+    .catch((err) => {console.log(err);});
+
     }
 
     addEmployee() {
-        inquirer
-        .prompt([
-        {
-            type: 'text',
-            name: 'first_name',
-            message: 'Enter the employee first name: ',
-            validate: nameInput => {
-                if (nameInput) {
-                    return true;
-                } else {
-                    return false;
+
+        var rolesData =[];
+        fetch(`http://localhost:${PORT}/api/roles`, {
+            method: 'GET',
+            headers: {
+            'Content-Type': 'application/json',
+            },
+        })
+        .then(async function(response) {
+            // request was successful
+            if (response.ok) {
+                await response.json().then(async function(data) {
+                for (var i =0; i<data.data.length; i++){
+                    rolesData[i] = data.data[i].id+" "+data.data[i].title+" "+data.data[i].department_name;
                 }
-            }
-        },
-        {
-            type: 'text',
-            name: 'last_name',
-            message: 'Enter the employee last name: ',
-            validate: nameInput => {
-                if (nameInput) {
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-        },
-        {
-            type: 'checkbox',
-            name: 'role_id',
-            message: 'Select the employee role: ',
-            choices: [1,2],
-            validate: nameInput => {
-                if (nameInput.length==1) {
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-        },
-        {
-            type: 'checkbox',
-            name: 'manager_id',
-            message: 'Select the employee s manager: ',
-            choices: [1,2],
-            validate: nameInput => {
-                if (nameInput.length==1) {
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-        }]
-        )
-        .then(({ first_name, last_name, role_id, manager_id }) => {
-            role_id=parseInt(role_id); 
-            manager_id=parseInt(manager_id); 
-            fetch(`http://localhost:${PORT}/api/employee`, {
-                method: 'POST',
-                headers: {
-                'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({first_name, last_name, role_id, manager_id}),
-            })
-            .then(async function(response) {
-                // request was successful
-                if (response.ok) {
-                    await response.json().then(async function(data) {
-                    console.log(data);
-                  })
-            }})
-            .catch((err) => {console.log(err);});
-        });
+              })
+        
+              var managersData =[];
+              fetch(`http://localhost:${PORT}/api/employees`, {
+                  method: 'GET',
+                  headers: {
+                  'Content-Type': 'application/json',
+                  },
+              })
+              .then(async function(response) {
+                  // request was successful
+                  if (response.ok) {
+                      await response.json().then(async function(data) {
+                      for (var i =0; i<data.data.length; i++){
+                          managersData[i] = data.data[i].id+" "+data.data[i].first_name+" "+data.data[i].last_name;
+                      }
+                    })
+
+                                inquirer
+                                .prompt([
+                                {
+                                    type: 'text',
+                                    name: 'first_name',
+                                    message: 'Enter the employee first name: ',
+                                    validate: nameInput => {
+                                        if (nameInput) {
+                                            return true;
+                                        } else {
+                                            return false;
+                                        }
+                                    }
+                                },
+                                {
+                                    type: 'text',
+                                    name: 'last_name',
+                                    message: 'Enter the employee last name: ',
+                                    validate: nameInput => {
+                                        if (nameInput) {
+                                            return true;
+                                        } else {
+                                            return false;
+                                        }
+                                    }
+                                },
+                                {
+                                    type: 'checkbox',
+                                    name: 'role_id',
+                                    message: 'Select the employee role: ',
+                                    choices: rolesData,
+                                    validate: nameInput => {
+                                        if (nameInput.length==1) {
+                                            return true;
+                                        } else {
+                                            return false;
+                                        }
+                                    }
+                                },
+                                {
+                                    type: 'checkbox',
+                                    name: 'manager_id',
+                                    message: 'Select the employee s manager: ',
+                                    choices: managersData,
+                                    validate: nameInput => {
+                                        if (nameInput.length==1) {
+                                            return true;
+                                        } else {
+                                            return false;
+                                        }
+                                    }
+                                }]
+                                )
+                                .then(({ first_name, last_name, role_id, manager_id }) => {
+                                    role_id=parseInt(role_id[0]); 
+                                    manager_id=parseInt(manager_id[0]); 
+                                    fetch(`http://localhost:${PORT}/api/employee`, {
+                                        method: 'POST',
+                                        headers: {
+                                        'Content-Type': 'application/json',
+                                        },
+                                        body: JSON.stringify({first_name, last_name, role_id, manager_id}),
+                                    })
+                                    .then(async function(response) {
+                                        // request was successful
+                                        if (response.ok) {
+                                            await response.json().then(async function(data) {
+                                            console.log(data);
+                                        })
+                                    }})
+                                    .catch((err) => {console.log(err);});
+                                });
+                            }})
+                            .catch((err) => {console.log(err);});
+                    }})
+                    .catch((err) => {console.log(err);});
     }
 
     initializeQuestions() {
