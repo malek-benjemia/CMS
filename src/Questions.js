@@ -17,7 +17,7 @@ class Questions {
         {
             type: 'checkbox',
             name: 'action',
-            message: `What action do you want to perform?`,
+            message: `What would you like to do?`,
             choices: ['view all departments', 'view all roles', 'view all employees', 'add a department', 'add a role', 'add an employee', 'update an employee role'],
             validate: nameInput => {
                 if (nameInput) {
@@ -69,7 +69,9 @@ class Questions {
                 console.table(data.data);
               })
         }})
-        .catch((err) => {console.log(err);});
+        .then(async function() {new Questions().initializeQuestions()})
+        .catch((err) => {console.log(err);})
+        
     }
 
     displayAllRoles () {
@@ -86,6 +88,7 @@ class Questions {
                 console.table(data.data);
               })
         }})
+        .then(async function() {new Questions().initializeQuestions()})
         .catch((err) => {console.log(err);});
     }
 
@@ -103,6 +106,7 @@ class Questions {
                 console.table(data.data);
               })
         }})
+        .then(async function() {new Questions().initializeQuestions()})
         .catch((err) => {console.log(err);});
     }
 //add
@@ -137,6 +141,7 @@ class Questions {
                     console.table(data.data);
                   })
             }})
+            .then(async function() {new Questions().initializeQuestions()})
             .catch((err) => {console.log(err);});
         });
     }
@@ -215,6 +220,7 @@ class Questions {
                                 console.table(data.data);
                         })
                     }})
+                    .then(async function() {new Questions().initializeQuestions()})
                     .catch((err) => {console.log(err);});
                 });
             }})
@@ -327,6 +333,7 @@ class Questions {
                                                 console.table(data.data);
                                         })
                                     }})
+                                    .then(async function() {new Questions().initializeQuestions()})
                                     .catch((err) => {console.log(err);});
                                 });
                             }})
@@ -413,11 +420,13 @@ updateEmployeeRole() {
                                     // request was successful
                                     if (response.ok) {
                                         await response.json().then(async function(data) {
-                                            console.log("success");
-                                            console.table(data.data);
+                                        console.log("success");
+                                        console.table(data.data);
                                     })
                                 }})
+                                .then(async function() {new Questions().initializeQuestions()})
                                 .catch((err) => {console.log(err);});
+                                
                             });
                         }})
                         .catch((err) => {console.log(err);});
